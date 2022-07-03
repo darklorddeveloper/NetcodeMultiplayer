@@ -2,17 +2,18 @@ using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
+using Unity.Netcode;
 
 namespace StarterAssets
 {
-    public class StarterAssetsInputs : MonoBehaviour, IThirdPersonCharacterInput
+    public class NetworkInputs : NetworkBehaviour, IThirdPersonCharacterInput
     {
         public Vector2 move { get; set; }
         public Vector2 look { get; set; }
         public bool jump { get; set; }
         public bool sprint { get; set; }
 
-        public bool analogMovement { get { return _analogMovement; } }
+        public bool analogMovement { get { return _analogMovement; }}
 
         [SerializeField] private bool _analogMovement;
 
@@ -44,7 +45,6 @@ namespace StarterAssets
             SprintInput(value.isPressed);
         }
 #endif
-
 
         public void MoveInput(Vector2 newMoveDirection)
         {

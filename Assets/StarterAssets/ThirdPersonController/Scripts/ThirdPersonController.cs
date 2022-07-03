@@ -2,7 +2,6 @@
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
-
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
 
@@ -103,8 +102,7 @@ namespace StarterAssets
 #endif
         private Animator _animator;
         private CharacterController _controller;
-        private StarterAssetsInputs _input;
-        private GameObject _mainCamera;
+        private IThirdPersonCharacterInput _input;
 
         private const float _threshold = 0.01f;
 
@@ -123,22 +121,22 @@ namespace StarterAssets
         }
 
 
-        private void Awake()
-        {
-            // get a reference to our main camera
-            if (_mainCamera == null)
-            {
-                _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-            }
-        }
-
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
             
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
-            _input = GetComponent<StarterAssetsInputs>();
+            MonoBehaviour[] components = GetComponents<MonoBehaviour>();
+            int length = components.Length;
+            for (int i = 0; i < length; i++)
+            {
+                if(components[i] is IThirdPersonCharacterInput)
+                {
+                    _input = components[i] as IThirdPersonCharacterInput;
+
+                }
+            }
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
             _playerInput = GetComponent<PlayerInput>();
 #else
@@ -256,7 +254,7 @@ namespace StarterAssets
             if (_input.move != Vector2.zero)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                                  _mainCamera.transform.eulerAngles.y;
+                                  CinemachineCameraTarget.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
 
