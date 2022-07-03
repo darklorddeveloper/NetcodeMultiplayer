@@ -8,16 +8,16 @@ namespace StarterAssets
 {
     public class NetworkInputs : NetworkBehaviour, IThirdPersonCharacterInput
     {
-        public Vector2 move { get; set; }
+        public Vector3 move { get; set; }
         public Vector2 look { get; set; }
         public bool jump { get; set; }
         public bool sprint { get; set; }
-
-        private NetworkVariable<Vector2> networkMove = new NetworkVariable<Vector2>();
+        private Vector2 originalInput = Vector2.zero;
+        private NetworkVariable<Vector3> networkMove = new NetworkVariable<Vector3>();
         private NetworkVariable<Vector2> networkLook = new NetworkVariable<Vector2>();
         private NetworkVariable<bool> networkSprint = new NetworkVariable<bool>();
 
-        public bool analogMovement { get { return _analogMovement; }}
+        public bool analogMovement { get { return _analogMovement; } }
 
         [SerializeField] private bool _analogMovement;
 
@@ -26,19 +26,26 @@ namespace StarterAssets
         public bool cursorInputForLook = true;
 
         private bool hasNewInputToUpdate = false;
+        private GameObject mainCamera;
+
+        public void Awake()
+        {
+            mainCamera = Camera.main.gameObject;
+        }
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         public void OnMove(InputValue value)
         {
-            MoveInput(value.Get<Vector2>());
+            hasNewInputToUpdate = true;
+            originalInput = value.Get<Vector2>();
+            RecalculateMoveInputDirection();
         }
 
         public void OnLook(InputValue value)
         {
-            if (cursorInputForLook)
-            {
-                LookInput(value.Get<Vector2>());
-            }
+            hasNewInputToUpdate = true;
+            look = value.Get<Vector2>();
+            RecalculateMoveInputDirection();
         }
 
         public void OnJump(InputValue value)
@@ -52,15 +59,13 @@ namespace StarterAssets
         }
 #endif
 
-        public void MoveInput(Vector2 newMoveDirection)
+        public void MoveInput(Vector3 newMoveDirection)
         {
-            hasNewInputToUpdate = true;
             move = newMoveDirection;
         }
 
         public void LookInput(Vector2 newLookDirection)
         {
-            hasNewInputToUpdate = true;
             look = newLookDirection;
         }
 
@@ -133,6 +138,13 @@ namespace StarterAssets
         public void OnJumpClientRPC(bool isPressed)
         {
             JumpInput(isPressed);
+        }
+
+        private void RecalculateMoveInputDirection()
+        {
+            Vector3 targetDirection = mainCamera.transform.forward * originalInput.y + mainCamera.transform.right * originalInput.x;
+            targetDirection.y = 0;
+            move = targetDirection.normalized;
         }
     }
 

@@ -7,7 +7,7 @@ namespace StarterAssets
 {
     public class StarterAssetsInputs : MonoBehaviour, IThirdPersonCharacterInput
     {
-        public Vector2 move { get; set; }
+        public Vector3 move { get; set; }
         public Vector2 look { get; set; }
         public bool jump { get; set; }
         public bool sprint { get; set; }

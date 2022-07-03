@@ -7,7 +7,7 @@ namespace StarterAssets
 {
 	public interface IThirdPersonCharacterInput
 	{
-		Vector2 move { get; set; }
+		Vector3 move { get; set; }
 		Vector2 look { get; set; }
 		bool jump { get; set; }
 		bool sprint { get; set; }
