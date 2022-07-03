@@ -17,10 +17,10 @@ namespace StarterAssets
         public bool useWorldSpaceInput = false;
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
-
+        public float OriginalMoveSpeed { get; private set; }
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
-
+        public float OriginalSprintSpeed { get; private set; }
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 12.56f)]
         public float RotationSmoothTime = 0.12f;
@@ -35,6 +35,7 @@ namespace StarterAssets
         [Space(10)]
         [Tooltip("The height the player can jump")]
         public float JumpHeight = 1.2f;
+        public float OriginalJumpHeight { get; private set; }
 
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float Gravity = -15.0f;
@@ -125,7 +126,9 @@ namespace StarterAssets
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
+            OriginalMoveSpeed = MoveSpeed;
+            OriginalJumpHeight = JumpHeight;
+            OriginalSprintSpeed = SprintSpeed;
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             MonoBehaviour[] components = GetComponents<MonoBehaviour>();

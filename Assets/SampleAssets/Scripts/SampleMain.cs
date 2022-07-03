@@ -14,6 +14,7 @@ namespace Sample
         [Header("spawn point")]
         [SerializeField] private Transform[] spawnPoints;
         [SerializeField] private float spwanRandomRadius = 1;
+        [SerializeField] private ItemManager itemManager;
 
         [SerializeField] private CinemachineVirtualCamera virtualCamera;
 
@@ -79,5 +80,6 @@ namespace Sample
             PlayerInput playerInput = thirdPersonController.GetComponent<PlayerInput>();
             playerInput.enabled = true;
         }
+
     }
 }

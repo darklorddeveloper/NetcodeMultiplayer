@@ -22,5 +22,7 @@ public class OnSpawnCharacterEventComponent : NetworkBehaviour
         {
             GameEvent.Instance.onSpawnedOwnerThirdpersonCharacter?.Invoke(thirdPersonController);
         }
+
+        GameEvent.Instance.onPlayerJoined?.Invoke(thirdPersonController);
     }
 }

@@ -13,5 +13,7 @@ public class GameEvent
     }
 
     public Action<ThirdPersonController> onSpawnedThirdpersonCharacterOnServer;
+    public Action<ThirdPersonController> onPlayerJoined;
     public Action<ThirdPersonController> onSpawnedOwnerThirdpersonCharacter;
+    public Action<ThirdPersonController, Collider> onCharacterTriggeredOther;
 }
