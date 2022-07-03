@@ -11,9 +11,11 @@ namespace Sample
     public class SampleMain : MonoBehaviour
     {
         [SerializeField] private RoomUI roomUI;
+        [Header("spawn point")]
         [SerializeField] private Transform[] spawnPoints;
-        [SerializeField] private CinemachineVirtualCamera virtualCamera;
         [SerializeField] private float spwanRandomRadius = 1;
+
+        [SerializeField] private CinemachineVirtualCamera virtualCamera;
 
         public void Start()
         {
